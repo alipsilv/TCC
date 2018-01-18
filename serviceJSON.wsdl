@@ -1,0 +1,38 @@
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:server" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:server">
+  <types>
+    <xsd:schema targetNamespace="urn:server">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+    </xsd:schema>
+  </types>
+  <message name="insertDataJSONRequest">
+    <part name="data" type="xsd:string"/>
+  </message>
+  <message name="insertDataJSONResponse">
+    <part name="return" type="xsd:boolean"/>
+  </message>
+  <portType name="serverPortType">
+    <operation name="insertDataJSON">
+      <documentation>Insert data into table</documentation>
+      <input message="tns:insertDataJSONRequest"/>
+      <output message="tns:insertDataJSONResponse"/>
+    </operation>
+  </portType>
+  <binding name="serverBinding" type="tns:serverPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="insertDataJSON">
+      <soap:operation soapAction="urn:server#insertMeasure" style="rpc"/>
+      <input>
+        <soap:body use="encoded" namespace="urn:server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="server">
+    <port name="serverPort" binding="tns:serverBinding">
+      <soap:address location="http://arduinoweatherstation.esy.es/serverJSON.php"/>
+    </port>
+  </service>
+</definitions>

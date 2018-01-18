@@ -1,0 +1,40 @@
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:server" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:server">
+  <types>
+    <xsd:schema targetNamespace="urn:server">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+    </xsd:schema>
+  </types>
+  <message name="insertMeasureRequest">
+    <part name="sensorID" type="xsd:string"/>
+    <part name="date" type="xsd:string"/>
+    <part name="value" type="xsd:string"/>
+  </message>
+  <message name="insertMeasureResponse">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <portType name="serverPortType">
+    <operation name="insertMeasure">
+      <documentation>Insert data into table</documentation>
+      <input message="tns:insertMeasureRequest"/>
+      <output message="tns:insertMeasureResponse"/>
+    </operation>
+  </portType>
+  <binding name="serverBinding" type="tns:serverPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="insertMeasure">
+      <soap:operation soapAction="urn:server#insertMeasure" style="rpc"/>
+      <input>
+        <soap:body use="encoded" namespace="urn:server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:server" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="server">
+    <port name="serverPort" binding="tns:serverBinding">
+      <soap:address location="http://arduinoweatherstation.esy.es/server.php"/>
+    </port>
+  </service>
+</definitions>
